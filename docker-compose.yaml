@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:latest
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: nottime
+    ports:
+      - "5432:5432"
+    networks:
+      - nottime-dev
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    ports:
+      - "8080:80"
+    networks:
+      - nottime-dev
+    depends_on:
+      - postgres
+
+  frontend:
+    image: nottime_frontend:latest
+    build:
+      context: ./notTime_frontend 
+    container_name: nottime_frontend_container
+    ports:
+      - "3000:80" 
+    networks:
+      - nottime-dev
+
+  backend:
+    image: nottime_backend:latest
+    build:
+      context: ./api
+    environment:
+      DATABASE_URL: ecto://admin:admin@db/nottime
+      SECRET_KEY_BASE: 8+tJPN/d9vFSyorf5NL24v+B813eVvc1TCoDsWFxTklv6yKBEn2zPyd3TtKPjAY0
+    container_name: nottime_backend_container
+    ports:
+      - "4000:4000" 
+    networks:
+      - nottime-dev
+    depends_on:
+        postgres:
+          condition: service_healthy
+
+
+networks:
+   nottime-dev:

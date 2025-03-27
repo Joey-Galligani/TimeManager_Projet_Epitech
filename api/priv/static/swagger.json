@@ -1,0 +1,1028 @@
+{
+  "info": {
+    "version": "1.0",
+    "title": "My API"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "User": {
+      "description": "A user in the system",
+      "example": {
+        "email": "john.doe@example.com",
+        "id": 1,
+        "inserted_at": "2023-10-08T14:30:00Z",
+        "updated_at": "2023-10-08T18:00:00Z",
+        "username": "john_doe"
+      },
+      "properties": {
+        "email": {
+          "description": "The user's email address",
+          "type": "string"
+        },
+        "id": {
+          "description": "User ID",
+          "type": "integer"
+        },
+        "inserted_at": {
+          "description": "When the user was created",
+          "format": "date_time",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "When the user was last updated",
+          "format": "date_time",
+          "type": "string"
+        },
+        "username": {
+          "description": "The user's username",
+          "type": "string"
+        }
+      },
+      "title": "User",
+      "type": "object"
+    },
+    "Error": {
+      "description": "An error response",
+      "example": {
+        "error": "Manager not found"
+      },
+      "properties": {
+        "error": {
+          "description": "Error message describing what went wrong",
+          "type": "string"
+        }
+      },
+      "title": "Error",
+      "type": "object"
+    },
+    "UserRequest": {
+      "description": "Parameters required to create or update a user",
+      "example": {
+        "user": {
+          "email": "john.doe@example.com",
+          "username": "john_doe"
+        }
+      },
+      "properties": {
+        "email": {
+          "description": "The user's email address",
+          "type": "string"
+        },
+        "password": {
+          "description": "The user's password",
+          "type": "string"
+        },
+        "username": {
+          "description": "The user's username",
+          "type": "string"
+        }
+      },
+      "required": [
+        "password",
+        "email",
+        "username"
+      ],
+      "title": "User Request",
+      "type": "object"
+    },
+    "Clock": {
+      "description": "A clock record for a user",
+      "example": {
+        "clock_in_time": "2023-10-08T14:30:00Z",
+        "clock_out_time": "2023-10-08T18:00:00Z",
+        "id": 1,
+        "user_id": "12"
+      },
+      "properties": {
+        "clock_in_time": {
+          "description": "The timestamp when the user clocked in",
+          "format": "date_time",
+          "type": "string"
+        },
+        "clock_out_time": {
+          "description": "The timestamp when the user clocked out",
+          "format": "date_time",
+          "type": "string"
+        },
+        "id": {
+          "description": "Clock ID",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "The ID of the user associated with this clock",
+          "type": "string"
+        }
+      },
+      "title": "Clock",
+      "type": "object"
+    },
+    "Manager": {
+      "description": "A manager in the system",
+      "example": {
+        "email": "john.doe@example.com",
+        "id": 1,
+        "inserted_at": "2023-10-08T14:30:00Z",
+        "updated_at": "2023-10-08T18:00:00Z",
+        "username": "john_doe"
+      },
+      "properties": {
+        "email": {
+          "description": "The user's email address",
+          "type": "string"
+        },
+        "id": {
+          "description": "Manager ID",
+          "type": "integer"
+        },
+        "inserted_at": {
+          "description": "When the user was created",
+          "format": "date_time",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "When the user was last updated",
+          "format": "date_time",
+          "type": "string"
+        },
+        "username": {
+          "description": "The user's username",
+          "type": "string"
+        }
+      },
+      "title": "Manager",
+      "type": "object"
+    },
+    "TimeManager": {
+      "description": "A working time entry for a user",
+      "example": {
+        "end_time": "2023-10-08T17:00:00Z",
+        "id": 1,
+        "start_time": "2023-10-08T09:00:00Z",
+        "user_id": "12"
+      },
+      "properties": {
+        "end_time": {
+          "description": "The end time of the working period",
+          "format": "date_time",
+          "type": "string"
+        },
+        "id": {
+          "description": "Working Time ID",
+          "type": "integer"
+        },
+        "start_time": {
+          "description": "The start time of the working period",
+          "format": "date_time",
+          "type": "string"
+        },
+        "user_id": {
+          "description": "The ID of the user associated with this working time",
+          "type": "string"
+        }
+      },
+      "title": "Working Time",
+      "type": "object"
+    },
+    "UserRegistration": {
+      "description": "Schema for registering a new user",
+      "example": {
+        "user": {
+          "email": "john.doe@example.com",
+          "non_hashed_password": "securepassword123"
+        }
+      },
+      "properties": {
+        "email": {
+          "description": "Email address of the user",
+          "format": "email",
+          "type": "string"
+        },
+        "non_hashed_password": {
+          "description": "Password for the user account",
+          "type": "string"
+        }
+      },
+      "required": [
+        "non_hashed_password",
+        "email"
+      ],
+      "title": "User Registration",
+      "type": "object"
+    },
+    "UserResponse": {
+      "description": "Response for a successful user registration",
+      "example": {
+        "message": "User registered successfully"
+      },
+      "properties": {
+        "message": {
+          "description": "Success message",
+          "type": "string"
+        }
+      },
+      "title": "User Response",
+      "type": "object"
+    },
+    "ErrorResponse": {
+      "description": "Response when an error occurs during user registration or login",
+      "example": {
+        "errors": {
+          "email": [
+            "has already been taken"
+          ],
+          "password": [
+            "is too short"
+          ]
+        }
+      },
+      "properties": {
+        "errors": {
+          "description": "Errors describing why the registration or login failed",
+          "type": "object"
+        }
+      },
+      "title": "Error Response",
+      "type": "object"
+    },
+    "UserLogin": {
+      "description": "Schema for logging in a user",
+      "example": {
+        "user": {
+          "email": "john.doe@example.com",
+          "non_hashed_password": "securepassword123"
+        }
+      },
+      "properties": {
+        "email": {
+          "description": "Email address of the user",
+          "format": "email",
+          "type": "string"
+        },
+        "non_hashed_password": {
+          "description": "Password for the user account",
+          "type": "string"
+        }
+      },
+      "required": [
+        "non_hashed_password",
+        "email"
+      ],
+      "title": "User Login",
+      "type": "object"
+    },
+    "LoginResponse": {
+      "description": "Response for a successful user login",
+      "example": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      },
+      "properties": {
+        "token": {
+          "description": "JWT token for the authenticated user",
+          "type": "string"
+        }
+      },
+      "title": "Login Response",
+      "type": "object"
+    },
+    "ManagerRequest": {
+      "description": "Parameters required to create or update a user",
+      "example": {
+        "manager": {
+          "email": "john.doe@example.com",
+          "username": "john_doe"
+        }
+      },
+      "properties": {
+        "email": {
+          "description": "The user's email address",
+          "type": "string"
+        },
+        "password": {
+          "description": "The user's password",
+          "type": "string"
+        },
+        "username": {
+          "description": "The user's username",
+          "type": "string"
+        }
+      },
+      "required": [
+        "password",
+        "email",
+        "username"
+      ],
+      "title": "Manager Request",
+      "type": "object"
+    },
+    "TimeManagerRequest": {
+      "description": "Parameters required to create or update a working time entry",
+      "example": {
+        "end_time": "2023-10-08T17:00:00Z",
+        "start_time": "2023-10-08T09:00:00Z"
+      },
+      "properties": {
+        "end_time": {
+          "description": "The end time of the working period",
+          "format": "date_time",
+          "type": "string"
+        },
+        "start_time": {
+          "description": "The start time of the working period",
+          "format": "date_time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "end_time",
+        "start_time"
+      ],
+      "title": "Working Time Request",
+      "type": "object"
+    }
+  },
+  "paths": {
+    "/api/clocks/{userID}": {
+      "get": {
+        "description": "Get clock information for a specific user.",
+        "operationId": "ApiWeb.ClockController.show",
+        "parameters": [
+          {
+            "description": "The ID of the user whose clock you want to retrieve",
+            "in": "path",
+            "name": "userID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Clock"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Clock"
+        ]
+      },
+      "post": {
+        "description": "Clock in for a specific user.",
+        "operationId": "ApiWeb.ClockController.create",
+        "parameters": [
+          {
+            "description": "The ID of the user to clock in",
+            "in": "path",
+            "name": "userID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Clock"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Clock"
+        ]
+      }
+    },
+    "/api/clocks/{userID}/last": {
+      "get": {
+        "description": "Get the last clock information for a specific user.",
+        "operationId": "ApiWeb.ClockController.show_last",
+        "parameters": [
+          {
+            "description": "The ID of the user whose last clock you want to retrieve",
+            "in": "path",
+            "name": "userID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Clock"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Clock"
+        ]
+      }
+    },
+    "/api/clocks/{userID}/last_by_limit": {
+      "get": {
+        "description": "Get the last clock information for a specific user.",
+        "operationId": "ApiWeb.ClockController.show_last_by_limit",
+        "parameters": [
+          {
+            "description": "The ID of the user whose last clock you want to retrieve",
+            "in": "path",
+            "name": "userID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The number of last clock records to retrieve",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Clock"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Clock"
+        ]
+      }
+    },
+    "/api/login": {
+      "post": {
+        "description": "Login a user.",
+        "operationId": "ApiWeb.AuthController.login",
+        "parameters": [
+          {
+            "description": "The user login details",
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/LoginResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/managers": {
+      "get": {
+        "description": "Get all manager.",
+        "operationId": "ApiWeb.ManagerController.index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Manager"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Manager"
+        ]
+      }
+    },
+    "/api/managers/userID": {
+      "post": {
+        "description": "Create a new manager.",
+        "operationId": "ApiWeb.ManagerController.create",
+        "parameters": [
+          {
+            "description": "The manager details to create",
+            "in": "body",
+            "name": "manager",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ManagerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Manager"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Manager"
+        ]
+      }
+    },
+    "/api/managers/{managerID}": {
+      "delete": {
+        "description": "Delete a manager by manager ID.",
+        "operationId": "ApiWeb.ManagerController.delete",
+        "parameters": [
+          {
+            "description": "The ID of the manager to delete",
+            "in": "path",
+            "name": "managerID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Manager"
+        ]
+      },
+      "get": {
+        "description": "Get details of a specific manager by manager ID.",
+        "operationId": "ApiWeb.ManagerController.show",
+        "parameters": [
+          {
+            "description": "The ID of the manager to retrieve",
+            "in": "path",
+            "name": "managerID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Manager"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Manager"
+        ]
+      }
+    },
+    "/api/register": {
+      "post": {
+        "description": "Register a new user.",
+        "operationId": "ApiWeb.AuthController.register",
+        "parameters": [
+          {
+            "description": "The user registration details",
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRegistration"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/timeManager/{id}": {
+      "put": {
+        "description": "Update an existing working time entry.",
+        "operationId": "ApiWeb.TimeManagerController.update",
+        "parameters": [
+          {
+            "description": "The ID of the working time entry to update",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The working time details to update",
+            "in": "body",
+            "name": "timeManager",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TimeManagerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TimeManager"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "TimeManager"
+        ]
+      }
+    },
+    "/api/timeManager/{userID}": {
+      "get": {
+        "description": "Retrieve a list of working times for a specific user filtered by start and end times.",
+        "operationId": "ApiWeb.TimeManagerController.index",
+        "parameters": [
+          {
+            "description": "The ID of the user to retrieve working times for",
+            "in": "path",
+            "name": "userID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The start time for filtering working times",
+            "format": "date_time",
+            "in": "query",
+            "name": "start_time",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The end time for filtering working times",
+            "format": "date_time",
+            "in": "query",
+            "name": "end_time",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/TimeManager"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "TimeManager"
+        ]
+      },
+      "post": {
+        "description": "Create a new working time entry for a specific user.",
+        "operationId": "ApiWeb.TimeManagerController.create",
+        "parameters": [
+          {
+            "description": "The ID of the user",
+            "in": "path",
+            "name": "userID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The working time details to create",
+            "in": "body",
+            "name": "timeManager",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TimeManagerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/TimeManager"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "TimeManager"
+        ]
+      }
+    },
+    "/api/timeManager/{userID}/{id}": {
+      "get": {
+        "description": "Get details of a specific working time entry by user ID and working time ID.",
+        "operationId": "ApiWeb.TimeManagerController.show",
+        "parameters": [
+          {
+            "description": "The ID of the user",
+            "in": "path",
+            "name": "userID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The ID of the working time entry",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TimeManager"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "TimeManager"
+        ]
+      }
+    },
+    "/api/users": {
+      "get": {
+        "description": "Get all user.",
+        "operationId": "ApiWeb.UserController.index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/User"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "User"
+        ]
+      },
+      "post": {
+        "description": "Create a new user.",
+        "operationId": "ApiWeb.UserController.create",
+        "parameters": [
+          {
+            "description": "The user details to create",
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/api/users/by_email?email={email}": {
+      "get": {
+        "description": "Get details of a specific user by email.",
+        "operationId": "ApiWeb.UserController.show_email",
+        "parameters": [
+          {
+            "description": "The email of the user to retrieve",
+            "in": "path",
+            "name": "email",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/api/users/{userID}": {
+      "delete": {
+        "description": "Delete a user by user ID.",
+        "operationId": "ApiWeb.UserController.delete",
+        "parameters": [
+          {
+            "description": "The ID of the user to delete",
+            "in": "path",
+            "name": "userID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "User"
+        ]
+      },
+      "get": {
+        "description": "Get details of a specific user by user ID.",
+        "operationId": "ApiWeb.UserController.show",
+        "parameters": [
+          {
+            "description": "The ID of the user to retrieve",
+            "in": "path",
+            "name": "userID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "User"
+        ]
+      },
+      "put": {
+        "description": "Update an existing user's details.",
+        "operationId": "ApiWeb.UserController.update",
+        "parameters": [
+          {
+            "description": "The ID of the user to update",
+            "in": "path",
+            "name": "userID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The user details to update",
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "User"
+        ]
+      }
+    }
+  },
+  "swagger": "2.0"
+}
